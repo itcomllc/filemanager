@@ -2,6 +2,7 @@
 
 use LivewireFilemanager\Filemanager\Models\Folder;
 use LivewireFilemanager\Filemanager\Models\Media;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,7 +98,7 @@ if (! function_exists('getMediaFullPath')) {
         }
 
         // Return the full path as a string
-        return config('app.url').'/'.implode('/', $path);
+        return route('business.filemanager.show', ['project' => null, 'path' => implode('/', $path)]);
     }
 }
 
@@ -114,9 +115,11 @@ if (! function_exists('buildFolderPath')) {
         $folder = Folder::find($folderId);
 
         if ($folder && $folder->parentWithoutRootFolder) {
-            return buildFolderPath($folder->parentWithoutRootFolder->id).'/'.$folder->slug;
+            $buildFolderPath = buildFolderPath($folder->parentWithoutRootFolder->id).'/'.$folder->slug;
+            return $buildFolderPath;
         } else {
-            return $folder ? $folder->slug : '';
+            $ret =  $folder ? $folder->slug : '';
+            return $ret;
         }
     }
 }
